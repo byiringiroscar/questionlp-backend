@@ -1,12 +1,12 @@
-from pydantic import BaseSettings
+# from pydantic import BaseSettings
 
 
-class Settings(BaseSettings):
-    secret_key: str
-    algorithm: str
-    access_token_expire_minutes: int
+# class Settings(BaseSettings):
+#     secret_key: str
+#     algorithm: str
+#     access_token_expire_minutes: int
 
-    class Config:
-        env_file = ".env"
+#     class Config:
+#         env_file = ".env"
 
-settings = Settings()
+# settings = Settings()

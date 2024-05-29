@@ -4,12 +4,12 @@ from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from datetime import datetime
 
-from .database import base
+from .database import Base
 
 
-class FileUpload(base):
+class FileUpload(Base):
     __tablename__ = "fileuploads"
     id = Column(Integer, primary_key=True, nullable=False)
     file_name = Column(String, nullable=False)
     file_content = Column(String, nullable=False)
-    time_uploaded = Column(TIMESTAMP, default=datetime.utcnow, nullable=False)
+    time_uploaded = Column(TIMESTAMP, default=datetime.utcnow())
