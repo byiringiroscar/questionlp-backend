@@ -10,6 +10,8 @@ from sqlalchemy.sql.expression import text
 import random
 import string
 import json
+import pymupdf
+import os
 
 
 
@@ -18,19 +20,32 @@ router = APIRouter(prefix='/question', tags=['QuestionNLP'])
 
 @router.post("/file_upload")
 async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
-    data = json.loads(file.file.read())
-    # file_name = file_upload.file_name
-    # file_content = file_upload.file_content
-    # db_file = models.FileUpload(file_name=file_name, file_content=file_content)
-    # db.add(db_file)
-    # db.commit()
-    # db.refresh(db_file)
+    # Validate file type (optional)
+    if not file.content_type.startswith('application/pdf'):
+        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail='Only PDF files are allowed.')
+    
+    random_number = randint(1000, 9999)
+    filename = f"temp_pdf_{random_number}.pdf"
+    # Save the uploaded file temporarily (optional, adjust as needed)
+    file_content = await file.read()
+    with open(filename, "wb") as buffer:
+        buffer.write(file_content)
+    
+    try:
+        # Extract text using PyMuPDF
+        with pymupdf.open(filename) as doc:
+            text_content = chr(12).join([page.get_text() for page in doc])
 
-    return {
-        'success': 'file_uploaded',
-        'content': data,
-        'file_name': file.filename
-    }
+        # Clean up temporary file (optional)
+        os.remove(filename)
+
+        # Return the extracted text
+        return JSONResponse(content={"text_content": text_content}, status_code=status.HTTP_200_OK)
+
+    except Exception as e:
+        # Handle potential errors during processing
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
 
 
 
