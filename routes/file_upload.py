@@ -12,10 +12,25 @@ import string
 import json
 import pymupdf
 import os
+import re
 
 
 
 router = APIRouter(prefix='/question', tags=['QuestionNLP'])
+
+
+def clean_text(text):
+    # Remove multiple newlines (\n)
+    text = text.replace('\n', " ")
+
+    # Remove form feed (\f) characters
+    text = re.sub(r"\f", "", text)
+
+    # Remove extra spaces at the beginning and end
+    text = text.strip()
+    text = re.sub(r"\s+", " ", text)
+
+    return text
 
 
 @router.post("/file_upload")
@@ -31,16 +46,21 @@ async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
     with open(filename, "wb") as buffer:
         buffer.write(file_content)
     
-    try:
-        # Extract text using PyMuPDF
-        with pymupdf.open(filename) as doc:
-            text_content = chr(12).join([page.get_text() for page in doc])
+    try:                               
+        text_content = ""
+        doc = pymupdf.open(filename)
+        for page in doc:
+            text = page.get_text().encode("utf8")
+            text_content += text.decode("utf-8")
+
+        doc.close()
 
         # Clean up temporary file (optional)
         os.remove(filename)
 
         # Return the extracted text
-        return JSONResponse(content={"text_content": text_content}, status_code=status.HTTP_200_OK)
+        file_new_content = clean_text(text_content)
+        return JSONResponse(content={"text_content": file_new_content}, status_code=status.HTTP_200_OK)
 
     except Exception as e:
         # Handle potential errors during processing
