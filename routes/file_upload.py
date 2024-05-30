@@ -7,9 +7,7 @@ from database.database import get_db
 from database import database, models
 from random import randint
 from sqlalchemy.sql.expression import text
-import random
-import string
-import json
+from utils.cleantext import clean_text
 import pymupdf
 import os
 import re
@@ -17,20 +15,6 @@ import re
 
 
 router = APIRouter(prefix='/question', tags=['QuestionNLP'])
-
-
-def clean_text(text):
-    # Remove multiple newlines (\n)
-    text = text.replace('\n', " ")
-
-    # Remove form feed (\f) characters
-    text = re.sub(r"\f", "", text)
-
-    # Remove extra spaces at the beginning and end
-    text = text.strip()
-    text = re.sub(r"\s+", " ", text)
-
-    return text
 
 
 @router.post("/file_upload")
