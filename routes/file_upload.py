@@ -44,7 +44,12 @@ async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
 
         # Return the extracted text
         file_new_content = clean_text(text_content)
-        return JSONResponse(content={"text_content": file_new_content}, status_code=status.HTTP_200_OK)
+        # add in database
+        new_file = models.FileUpload(file_name=file.filename, file_content=file_new_content)
+        db.add(new_file)
+        db.commit()
+        db.refresh(new_file)
+        return JSONResponse(content={"response": 'data uploaded successfully'}, status_code=status.HTTP_200_OK)
 
     except Exception as e:
         # Handle potential errors during processing
