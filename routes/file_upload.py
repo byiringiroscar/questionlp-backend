@@ -11,7 +11,7 @@ from sqlalchemy.sql.expression import text
 from utils.cleantext import clean_text
 import pymupdf
 import os
-from utils.langchainsetup import get_text_chunks, get_vector_store
+from utils.langchainsetup import get_text_chunks, get_vector_store, user_input
 
 
 
@@ -77,8 +77,10 @@ async def ask_question(question: str, folder_id: Optional[int] = None , db: Sess
         if not file:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found please upload some pdf")
         folder_document_id = file.id
+
+    response = user_input(question, folder_document_id)
     return {
-        "response": "question received"
+        "response": response
     }
     
 
