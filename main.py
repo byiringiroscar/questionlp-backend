@@ -8,7 +8,7 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 
-origin = ['*']
+origin = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
