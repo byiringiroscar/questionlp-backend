@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response, UploadFile
+from typing import Optional
 from sqlalchemy.orm import Session
 from schemas.fileuploads import FileUpload
 from sqlalchemy import or_
@@ -59,7 +60,7 @@ async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 @router.post("/ask_question")
-async def ask_question(question: str, db: Session=Depends(get_db)):
+async def ask_question(question: str, folder_id: Optional[int] = None , db: Session=Depends(get_db)):
     return {
         "response": "question received"
     }
