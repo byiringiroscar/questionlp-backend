@@ -49,7 +49,9 @@ async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
         db.add(new_file)
         db.commit()
         db.refresh(new_file)
-        print("id--------------------",  new_file.id)
+        # process documents with gemini and langchain
+        text_chunks = get_text_chunks(file_new_content)
+        get_vector_store(text_chunks, new_file.id)
         return JSONResponse(content={"response": 'data uploaded successfully'}, status_code=status.HTTP_200_OK)
 
     except Exception as e:
