@@ -88,4 +88,23 @@ async def ask_question(question: str, folder_id: Optional[int] = None , db: Sess
     
 
 
+@router.get("/get_all_question_answer")
+async def get_all_question_answer(folder_id: Optional[int] = None, db: Session=Depends(get_db)):
+    if folder_id:
+        # get first in model FileUpload where equal id equal to folder_id
+        file = db.query(models.FileUpload).filter(models.FileUpload.id == folder_id).first()
+        if not file:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found id mismatch")
+        # get all question and answer where fileupload_id is equal to folder_id
+        question_answer = db.query(models.QuestionAnswer).filter(models.QuestionAnswer.fileupload_id == folder_id).all()
+        return JSONResponse(content={"response": question_answer }, status_code=status.HTTP_200_OK)
+    else:
+        # get first in model FileUpload
+        file = db.query(models.FileUpload).order_by(models.FileUpload.id.desc()).first()
+        if not file:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found please upload some pdf")
+        # get all question and answer where fileupload_id is equal to folder_id
+        question_answer = db.query(models.QuestionAnswer).filter(models.QuestionAnswer.fileupload_id == file.id).all()
+        return JSONResponse(content={"response": question_answer }, status_code=status.HTTP_200_OK)
+
 
