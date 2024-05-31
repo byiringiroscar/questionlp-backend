@@ -10,7 +10,6 @@ from sqlalchemy.sql.expression import text
 from utils.cleantext import clean_text
 import pymupdf
 import os
-import re
 
 
 
