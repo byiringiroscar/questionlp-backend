@@ -33,5 +33,24 @@ def get_text_chunks(text):
 def get_vector_store(text_chunks, folder_id):
     embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
     vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
-    # save to folder faiss_index/folder_id
     vector_store.save_local(f"faiss_index/{folder_id}")
+
+
+def get_conversational_chain():
+
+    prompt_template = """
+    Answer the question as detailed as possible from the provided context, make sure to provide all the details, if the answer is not in
+    provided context just say, "answer is not available in the context", don't provide the wrong answer\n\n
+    Context:\n {context}?\n
+    Question: \n{question}\n
+
+    Answer:
+    """
+
+    model = ChatGoogleGenerativeAI(model="gemini-pro",
+                             temperature=0.3)
+
+    prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
+    chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
+
+    return chain
