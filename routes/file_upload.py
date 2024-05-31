@@ -10,6 +10,7 @@ from sqlalchemy.sql.expression import text
 from utils.cleantext import clean_text
 import pymupdf
 import os
+from utils.langchainsetup import get_text_chunks, get_vector_store
 
 
 
