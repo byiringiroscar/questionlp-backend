@@ -68,9 +68,14 @@ async def ask_question(question: str, folder_id: Optional[int] = None , db: Sess
 
     folder_document_id = None
     if folder_id:
+        file = db.query(models.FileUpload).filter(models.FileUpload.id == folder_id).first()
+        if not file:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found id mismatch")
         folder_document_id = folder_id
     else:
         file = db.query(models.FileUpload).order_by(models.FileUpload.id.desc()).first()
+        if not file:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found please upload some pdf")
         folder_document_id = file.id
     return {
         "response": "question received"
