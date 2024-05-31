@@ -80,7 +80,7 @@ async def ask_question(question: str, folder_id: Optional[int] = None , db: Sess
 
     response = user_input(question, folder_document_id)
     # save to database 
-    new_question = models.QuestionAnswer(question=question, answer=response, fileupload_id=folder_document_id)
+    new_question = models.QuestionAnswer(question=question, answer=response, fileupload_id=int(folder_document_id))
     db.add(new_question)
     db.commit()
     db.refresh(new_question)
