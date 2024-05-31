@@ -57,6 +57,12 @@ async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
     except Exception as e:
         # Handle potential errors during processing
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+@router.post("/ask_question")
+async def ask_question(question: str, db: Session=Depends(get_db)):
+    return {
+        "response": "question received"
+    }
     
 
 
