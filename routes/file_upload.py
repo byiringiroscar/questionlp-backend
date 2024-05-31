@@ -61,6 +61,17 @@ async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
 
 @router.post("/ask_question")
 async def ask_question(question: str, folder_id: Optional[int] = None , db: Session=Depends(get_db)):
+    # check if question is not provided or is empty
+    if not question:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Question is required")
+    
+
+    folder_document_id = None
+    if folder_id:
+        folder_document_id = folder_id
+    else:
+        file = db.query(models.FileUpload).order_by(models.FileUpload.id.desc()).first()
+        folder_document_id = file.id
     return {
         "response": "question received"
     }
