@@ -97,7 +97,7 @@ async def get_all_question_answer(folder_id: Optional[int] = None, db: Session=D
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found id mismatch")
         # get all question and answer where fileupload_id is equal to folder_id
         question_answer = db.query(models.QuestionAnswer).filter(models.QuestionAnswer.fileupload_id == folder_id).all()
-        return JSONResponse(content={"response": question_answer }, status_code=status.HTTP_200_OK)
+        return question_answer
     else:
         # get first in model FileUpload
         file = db.query(models.FileUpload).order_by(models.FileUpload.id.desc()).first()
@@ -105,6 +105,6 @@ async def get_all_question_answer(folder_id: Optional[int] = None, db: Session=D
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found please upload some pdf")
         # get all question and answer where fileupload_id is equal to folder_id
         question_answer = db.query(models.QuestionAnswer).filter(models.QuestionAnswer.fileupload_id == file.id).all()
-        return JSONResponse(content={"response": question_answer }, status_code=status.HTTP_200_OK)
+        return question_answer
 
 
