@@ -9,3 +9,8 @@ class FileUpload(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class QuestionRequest(BaseModel):
+    question: str
+    folder_id: Optional[int] = None
