@@ -22,7 +22,8 @@ else:
             database='questionlp',
         )
     
-engine = create_engine(DATABASE_URL)
+# engine = create_engine(DATABASE_URL)
+engine = create_engine("sqlite:///todo.db")
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
