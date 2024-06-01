@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response, UploadFile
 from typing import Optional
 from sqlalchemy.orm import Session
-from schemas.fileuploads import FileUpload
+from schemas.fileuploads import FileUpload, QuestionRequest
 from sqlalchemy import or_
 from starlette.responses import JSONResponse
 from database.database import get_db
@@ -16,6 +16,35 @@ from utils.langchainsetup import get_text_chunks, get_vector_store, user_input
 
 
 router = APIRouter(prefix='/question', tags=['QuestionNLP'])
+
+
+@router.post("/ask_question")
+async def ask_question(request: QuestionRequest, folder_id: Optional[int] = None , db: Session=Depends(get_db)):
+    question = request.question
+    folder_id = request.folder_id
+    # check if question is not provided or is empty
+    if not question:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Question is required")
+
+    folder_document_id = None
+    if folder_id:
+        file = db.query(models.FileUpload).filter(models.FileUpload.id == folder_id).first()
+        if not file:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found id mismatch")
+        folder_document_id = folder_id
+    else:
+        file = db.query(models.FileUpload).order_by(models.FileUpload.id.desc()).first()
+        if not file:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found please upload some pdf")
+        folder_document_id = file.id
+
+    response = user_input(question, folder_document_id)
+    # save to database 
+    new_question = models.QuestionAnswer(question=question, answer=response, fileupload_id=int(folder_document_id))
+    db.add(new_question)
+    db.commit()
+    db.refresh(new_question)
+    return JSONResponse(content={"status": 'success'}, status_code=status.HTTP_200_OK)
 
 
 @router.post("/file_upload")
@@ -53,38 +82,13 @@ async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
         # process documents with gemini and langchain
         text_chunks = get_text_chunks(file_new_content)
         get_vector_store(text_chunks, new_file.id)
-        return JSONResponse(content={"response": 'data uploaded successfully'}, status_code=status.HTTP_200_OK)
+        return JSONResponse(content={"status": 'success'}, status_code=status.HTTP_200_OK)
 
     except Exception as e:
         # Handle potential errors during processing
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.post("/ask_question")
-async def ask_question(question: str, folder_id: Optional[int] = None , db: Session=Depends(get_db)):
-    # check if question is not provided or is empty
-    if not question:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Question is required")
-    
 
-    folder_document_id = None
-    if folder_id:
-        file = db.query(models.FileUpload).filter(models.FileUpload.id == folder_id).first()
-        if not file:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found id mismatch")
-        folder_document_id = folder_id
-    else:
-        file = db.query(models.FileUpload).order_by(models.FileUpload.id.desc()).first()
-        if not file:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found please upload some pdf")
-        folder_document_id = file.id
-
-    response = user_input(question, folder_document_id)
-    # save to database 
-    new_question = models.QuestionAnswer(question=question, answer=response, fileupload_id=int(folder_document_id))
-    db.add(new_question)
-    db.commit()
-    db.refresh(new_question)
-    return JSONResponse(content={"response": response}, status_code=status.HTTP_200_OK)
     
 
 
