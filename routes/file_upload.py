@@ -19,7 +19,7 @@ router = APIRouter(prefix='/question', tags=['QuestionNLP'])
 
 
 @router.post("/ask_question")
-async def ask_question(request: QuestionRequest, folder_id: Optional[int] = None , db: Session=Depends(get_db)):
+async def ask_question(request: QuestionRequest, db: Session=Depends(get_db)):
     question = request.question
     folder_id = request.folder_id
     # check if question is not provided or is empty
@@ -44,7 +44,7 @@ async def ask_question(request: QuestionRequest, folder_id: Optional[int] = None
     db.add(new_question)
     db.commit()
     db.refresh(new_question)
-    return JSONResponse(content={"status": 'success'}, status_code=status.HTTP_200_OK)
+    return JSONResponse(content={"status": 'success', 'answer': response}, status_code=status.HTTP_200_OK)
 
 
 @router.post("/file_upload")
