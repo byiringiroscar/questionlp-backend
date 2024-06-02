@@ -211,7 +211,7 @@ this project has a frontend of nextjs click to open the frontend repository
 
 - [ ] **[Connecting with cloudinary]**
 - [ ] **[Connecting with GPT 4]**
-- [ ] **[Handle multiple pdf fike**
+- [ ] **[Handle multiple pdf file**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
