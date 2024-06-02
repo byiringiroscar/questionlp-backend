@@ -89,6 +89,13 @@ async def file_upload_display(file: UploadFile, db: Session=Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
+
+@router.get("/latest_fileupload")
+async def get_latest_fileupload(db: Session=Depends(get_db)):
+    file = db.query(models.FileUpload).order_by(models.FileUpload.id.desc()).first()
+    if not file:
+        return JSONResponse(content={"warning": 'File not found'}, status_code=status.HTTP_404_NOT_FOUND)
+    return file
     
 
 
