@@ -159,7 +159,8 @@ Example command:
 ### Usage
 
 
-To run the project make sure **[Python ]** installed correctly then , execute the following command:
+To run the project make sure **[Python ]** is installed correctly then, execute the following command:
+
 
 
 Create a virtual environment to install dependencies in and activate it:
@@ -173,6 +174,7 @@ Then install the dependencies:
 
 ```sh
 (env)$ pip install -r requirements.txt
+```
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
