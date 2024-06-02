@@ -23,7 +23,7 @@ else:
         )
     
 # engine = create_engine(DATABASE_URL)
-engine = create_engine("sqlite:///questionlp.db")
+engine = create_engine("sqlite:///questionpdfnlp.db")
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
