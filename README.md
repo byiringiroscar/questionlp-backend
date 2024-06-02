@@ -87,15 +87,15 @@ After you're finished please remove all the comments and instructions!
 - **Ask question endpoint**
 - **Use of langchain and Gemini pro with fast API**
 - **Additional endpoint for tracking documents**
-- **SQLite database by default **
+- **SQLite database by default**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LIVE DEMO -->
 
-## 🚀 Live Demo <a name="live-demo"></a>
+## 🚀 Live Presentation <a name="live-demo"></a>
 
-- [Live Presentation Link]([https://gameboss.onrender.com/](https://www.loom.com/share/7b7ef4f8873a4b90b7af4aebfcf7c576?sid=f66fb727-34ff-4514-b205-ee9e7ea6ce62))
+- [Live Presentation Link](https://www.loom.com/share/7b7ef4f8873a4b90b7af4aebfcf7c576?sid=f66fb727-34ff-4514-b205-ee9e7ea6ce62)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -211,7 +211,7 @@ this project has a frontend of nextjs click to open the frontend repository
 
 - [ ] **[Connecting with cloudinary]**
 - [ ] **[Connecting with GPT 4]**
-- [ ] **[Handle multiple pdf fike**
+- [ ] **[Handle multiple pdf file**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
