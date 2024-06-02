@@ -87,7 +87,7 @@ After you're finished please remove all the comments and instructions!
 - **Ask question endpoint**
 - **Use of langchain and Gemini pro with fast API**
 - **Additional endpoint for tracking documents**
-- **SQLite database by default **
+- **SQLite database by default**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
