@@ -175,7 +175,19 @@ Then install the dependencies:
 ```sh
 (env)$ pip install -r requirements.txt
 ```
+Note the `(env)` in front of the prompt. This indicates that this terminal
+session operates in a virtual environment set up by `virtualenv2`.
 
+Once `pip` has finished downloading the dependencies:
+```sh
+(env)$ cd questionlp-backend
+(env)$ fastapi dev main.py
+```
+And navigate to `http://127.0.0.1:8000/docs/` for API documentation.
+
+Link to frontend:
+this project has a frontend of nextjs click to open the frontend repository 
+<a href="https://github.com/byiringiroscar/questionnlp-frontend.git" target="_blank">Question frontend repository</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
